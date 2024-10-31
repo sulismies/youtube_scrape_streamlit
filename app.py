@@ -70,18 +70,18 @@ translations = {
         'error_fetching_videos': 'Error fetching videos for channel: {}',
         'error_fetching_video_details': 'Error fetching video details: {}',
         'error_fetching_channel_id_from_video': 'Error fetching channel ID from video: {}',
-        'manual_transcript_found': 'Manually created transcript found for video {} in languages {}.',
-        'no_manual_transcript': 'No manually created transcript found for video {} in languages {}.',
-        'auto_transcript_found': 'Auto-generated transcript found for video {} in languages {}.',
-        'transcript_found': 'Transcript found for video {} in languages {}.',
-        'no_transcript_available': 'No transcript available for video {} in languages {}.',
-        'transcripts_disabled': 'Transcripts are disabled for video {}.',
-        'video_unavailable': 'Video {} is unavailable.',
-        'unexpected_error': 'An unexpected error occurred while fetching transcript for video {}: {}',
+        'manual_transcript_found': 'Manually created transcript found for video "{}" in language "{}".',
+        'no_manual_transcript': 'No manually created transcript found for video "{}" in languages {}.',
+        'auto_transcript_found': 'Auto-generated transcript found for video "{}" in language "{}".',
+        'transcript_found': 'Transcript found for video "{}" in language "{}".',
+        'no_transcript_available': 'No transcript available for video "{}" in languages {}.',
+        'transcripts_disabled': 'Transcripts are disabled for video "{}".',
+        'video_unavailable': 'Video "{}" is unavailable.',
+        'unexpected_error': 'An unexpected error occurred while fetching transcript for video "{}": {}',
         'summary_prepared': 'Summary of all videos prepared.',
         'transcripts_to_process': 'Transcripts to process: {}',
-        'transcript_fetched': 'Transcript fetched for video: {}',
-        'skipping_video': 'Skipping video ID {} due to unavailable transcript.',
+        'transcript_fetched': 'Transcript fetched for video: "{}".',
+        'skipping_video': 'Skipping video ID "{}" due to unavailable transcript.',
         'completed_processing': 'Completed processing. Total transcripts fetched: {}',
         'concatenated_docx_created': 'Concatenated transcript document created.',
         'download_results': 'Download Results',
@@ -142,18 +142,18 @@ translations = {
         'error_fetching_videos': 'Virhe videoiden hakemisessa kanavalle: {}',
         'error_fetching_video_details': 'Virhe videon tietojen hakemisessa: {}',
         'error_fetching_channel_id_from_video': 'Virhe kanavan ID:n hakemisessa videosta: {}',
-        'manual_transcript_found': 'Manuaalisesti luotu tekstitystiedosto löytyi videolle {} kielillä {}.',
-        'no_manual_transcript': 'Manuaalista tekstitystiedostoa ei löytynyt videolle {} kielillä {}.',
-        'auto_transcript_found': 'Automaattisesti luotu tekstitystiedosto löytyi videolle {} kielillä {}.',
-        'transcript_found': 'Tekstitystiedosto löytyi videolle {} kielillä {}.',
-        'no_transcript_available': 'Tekstitystiedostoa ei ole saatavilla videolle {} kielillä {}.',
-        'transcripts_disabled': 'Tekstitystiedostot ovat pois käytöstä videolle {}.',
-        'video_unavailable': 'Video {} ei ole saatavilla.',
-        'unexpected_error': 'Odottamaton virhe tekstitystiedostoa haettaessa videolle {}: {}',
+        'manual_transcript_found': 'Manuaalisesti luotu tekstitystiedosto löytyi videolle "{}" kielillä "{}".',
+        'no_manual_transcript': 'Manuaalista tekstitystiedostoa ei löytynyt videolle "{}" kielillä {}.',
+        'auto_transcript_found': 'Automaattisesti luotu tekstitystiedosto löytyi videolle "{}" kielillä "{}".',
+        'transcript_found': 'Tekstitystiedosto löytyi videolle "{}" kielillä "{}".',
+        'no_transcript_available': 'Tekstitystiedostoa ei ole saatavilla videolle "{}" kielillä {}.',
+        'transcripts_disabled': 'Tekstitystiedostot ovat pois käytöstä videolle "{}".',
+        'video_unavailable': 'Video "{}" ei ole saatavilla.',
+        'unexpected_error': 'Odottamaton virhe tekstitystiedostoa haettaessa videolle "{}": {}',
         'summary_prepared': 'Kaikkien videoiden yhteenveto valmisteltu.',
         'transcripts_to_process': 'Prosessoitavien tekstitystiedostojen määrä: {}',
-        'transcript_fetched': 'Tekstitystiedosto haettu videolle: {}',
-        'skipping_video': 'Ohitetaan video ID {} tekstitystiedoston puutteellisuuden vuoksi.',
+        'transcript_fetched': 'Tekstitystiedosto haettu videolle: "{}".',
+        'skipping_video': 'Ohitetaan video ID "{}" tekstitystiedoston puutteellisuuden vuoksi.',
         'completed_processing': 'Prosessointi valmis. Haetut tekstitystiedostot yhteensä: {}',
         'concatenated_docx_created': 'Yhdistetty tekstitystiedostosiakirja luotu.',
         'download_results': 'Lataa Tulokset',
@@ -425,40 +425,49 @@ def get_all_video_ids(youtube, channel_id):
         st.sidebar.error(translations[selected_language]['error_fetching_videos'].format(e))
     return video_ids
 
-def fetch_transcript(video_id, languages=['en']):
+def fetch_transcript(video_id):
     """
     Fetches the transcript for a given YouTube video ID.
-    Prioritizes manually created transcripts but falls back to auto-generated ones if necessary.
+    Prioritizes transcripts in fi, then sv, then en. If none are available, selects any available transcript.
 
     Args:
         video_id (str): The YouTube video ID.
-        languages (list): List of language codes to search for transcripts.
 
     Returns:
         list or None: The transcript as a list of dictionaries if available, else None.
     """
+    preferred_languages = ['fi', 'sv', 'en']
     try:
         transcript_list = YouTubeTranscriptApi.list_transcripts(video_id)
 
-        # Attempt to find a manually created transcript
-        try:
-            transcript = transcript_list.find_manually_created_transcript(languages)
-            st.info(translations[selected_language]['manual_transcript_found'].format(video_id, languages))
-            return transcript.fetch()
-        except NoTranscriptFound:
-            st.warning(translations[selected_language]['no_manual_transcript'].format(video_id, languages))
-
-            # Attempt to find an auto-generated transcript
+        # Attempt to find a manually created transcript in preferred languages
+        for lang in preferred_languages:
             try:
-                transcript = transcript_list.find_transcript(languages)
-                if transcript.is_generated:
-                    st.info(translations[selected_language]['auto_transcript_found'].format(video_id, languages))
-                else:
-                    st.info(translations[selected_language]['transcript_found'].format(video_id, languages))
+                transcript = transcript_list.find_manually_created_transcript([lang])
+                st.info(translations[selected_language]['manual_transcript_found'].format(video_id, lang))
                 return transcript.fetch()
             except NoTranscriptFound:
-                st.warning(translations[selected_language]['no_transcript_available'].format(video_id, languages))
-                return None
+                continue  # Try next preferred language
+
+        # If no manually created transcripts found in preferred languages, try auto-generated
+        for lang in preferred_languages:
+            try:
+                transcript = transcript_list.find_generated_transcript([lang])
+                st.info(translations[selected_language]['auto_transcript_found'].format(video_id, lang))
+                return transcript.fetch()
+            except NoTranscriptFound:
+                continue  # Try next preferred language
+
+        # If no preferred language transcripts are found, select any available transcript
+        try:
+            transcript = transcript_list.find_transcript(transcript_list._list_transcripts)
+            language = transcript.language
+            transcript_type = 'auto-generated' if transcript.is_generated else 'manually created'
+            st.info(translations[selected_language]['transcript_found'].format(video_id, language))
+            return transcript.fetch()
+        except NoTranscriptFound:
+            st.warning(translations[selected_language]['no_transcript_available'].format(video_id, preferred_languages))
+            return None
 
     except TranscriptsDisabled:
         st.warning(translations[selected_language]['transcripts_disabled'].format(video_id))
