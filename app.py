@@ -42,6 +42,20 @@ from youtube_transcript_api import (
 from docx import Document
 from docx.shared import Pt
 
+# Set the page configuration with the custom favicon
+# st.set_page_config(
+#     page_title="Crazy Horse",       # Title that appears in the browser tab
+#     page_icon="crazy-horse-icon.png",           # Path to your favicon image
+# )
+# st.image("crazy-horse.png", width=400)
+
+col1, col2, col3 = st.columns([1, 2, 1])
+
+# Place the image in the center column
+with col2:
+    st.image("crazy-horse.png", use_column_width=True)
+
+
 # ----------------------------
 # Configuration Variables
 # ----------------------------
