@@ -885,6 +885,7 @@ def main_entry():
     urls_input = st.text_area(
         translations[selected_language]['channel_url'],
         height=150,
+        value="@SabineHossenfelder", 
         help=translations[selected_language].get('channel_url_help', '')
     )
     urls = re.split(r'[,\n]+', urls_input) if urls_input else []
