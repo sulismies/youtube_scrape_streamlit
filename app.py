@@ -8,6 +8,8 @@
 # https://chatgpt.com/c/6720af1e-df2c-800f-a351-17239beb5ba2?model=o1-mini
 #
 #
+# Youtube api AIzaSyC2MmBms11CcqAeFhLXrtWa2KPvFKU8vDU
+#
 # python scrape.py UCZsM8MOy0VC9blj_wBkbo-g 5 2024-10-05 
 # python scrape.py UCwI9DhoGEziLUxTpK8H77jw 
 # python scrape.py UCvTcxoyItMUSlw8T2MajftA 100 2023-10-30
@@ -139,7 +141,7 @@ translations = {
 """
     },
     'fi': {
-        'title': 'YouTube Tekstitystiedostojen Hakija',
+        'title': 'YouTube tekstitystiedostojen hakija',
         'description': 'Tämä sovellus mahdollistaa tekstitystiedostojen hakemisen YouTube-kanavan videoista tai yksittäisistä videoista. Syötä yksi tai useampi kanavan URL-osoite, videon URL-osoite tai kanavan nimi (esim. @ChannelName), määritä haettavien tekstitystiedostojen määrä ja anna päivämäärä, jota vanhempia videoita ei haeta.',
         'api_key': 'YouTube API-avain',
         'api_key_help': 'Syötä YouTube Data API -avaimesi.',
@@ -170,7 +172,7 @@ translations = {
         'skipping_video': 'Ohitetaan video ID "{}" tekstitystiedoston puutteellisuuden vuoksi.',
         'completed_processing': 'Prosessointi valmis. Haetut tekstitystiedostot yhteensä: {}',
         'concatenated_docx_created': 'Yhdistetty tekstitystiedostosiakirja luotu.',
-        'download_results': 'Lataa Tulokset',
+        'download_results': 'Lataa tulokset',
         'download_summary': 'Lataa Yhteenveto',
         'download_docx': 'Lataa Tekstitystiedostot (.docx)',
         'processing_channel_url': 'Prosessoidaan kanavan syöte: {}',
