@@ -8,16 +8,12 @@
 # https://chatgpt.com/c/6720af1e-df2c-800f-a351-17239beb5ba2?model=o1-mini
 #
 #
-# Youtube api 
-# AIzaSyC2MmBms11
-# CcqAeFhLXrtWa2K
 # python scrape.py UCZsM8MOy0VC9blj_wBkbo-g 5 2024-10-05 
 # python scrape.py UCwI9DhoGEziLUxTpK8H77jw 
 # python scrape.py UCvTcxoyItMUSlw8T2MajftA 100 2023-10-30
 # python scrape.py UCUqLL4VcEy4mXcQL0O_H_bg 1 2023-10-30
 # python scrape.py UCy0-ftAwxMHzZc74OhYT3PA 1 2023-10-30
 # python scrape.py UCUqLL4VcEy4mXcQL0O_H_bg 1 2023-10-30
-# PvFKU8vDU
 
 # channel_identifiers = [
 #     'UCZsM8MOy0VC9blj_wBkbo-g',   # https://www.youtube.com/@PurgeGamers               OK
